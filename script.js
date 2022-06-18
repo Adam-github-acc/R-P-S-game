@@ -1,5 +1,9 @@
-/*computerPlay function that returns 
+/*computerPlay function that result.textContent =s 
 r, p or s when called upon*/
+let computerPoints = 0;
+let playerPoints = 0;
+let rounds = 0;
+
 let computerPlay = () => {
     let randomNumber = Math.floor(Math.random()*3);
     if(randomNumber == 1){
@@ -11,11 +15,10 @@ let computerPlay = () => {
     else return 'scissors'
 }
 
-let outcome = (playerSelection, computerSelection) => {
+let playRound = (playerSelection, computerSelection) => {
     let playerSelectionLowerCase = playerSelection.toLowerCase();
-    console.log(computerSelection)
     if(playerSelectionLowerCase == computerSelection){
-        return "That's a tie play again"
+        return "tie"
     }
     else if(playerSelectionLowerCase == 'rock'){
         if(computerSelection == 'paper'){
@@ -43,26 +46,56 @@ let outcome = (playerSelection, computerSelection) => {
     }
     
 }
+const btnR = document.querySelector('#btnR')
+btnR.addEventListener('click', () => {
+    game("rock")
+});
 
-let game = () => {
-    let computerPoints = 0;
-    let playerPoints = 0;
-    for(let i = 0; i < 5; i++){
-    let userInput = prompt("Rock, paper, scissors")
-    let result = outcome(userInput, computerPlay());
+const btnP = document.querySelector('#btnP')
+btnP.addEventListener('click', () => {
+    game("paper")
+});
+
+const btnS = document.querySelector('#btnS')
+btnS.addEventListener('click', () => {
+    game("scissors")
+});
+const results = document.querySelector('#result')
+const round = document.querySelector('#round')
+const points = document.querySelector('#points')
+
+let game = (userInput) => {
+    let result = playRound(userInput, computerPlay());
     if(result == "win" ){
-        console.log("You win you have " + (playerPoints += 1) + " points")
+        results.setAttribute('style', 'color: green')
+        results.textContent = "You win"
+        round.textContent = "Round: " + (rounds +=1)
+        points.textContent = "Computer points: " + (computerPoints) + " Player points: " + (playerPoints += 1)
     }
     else if(result == "lose"){
-        console.log("You lose computer has " + (computerPoints += 1) + " points")
+        results.setAttribute('style', 'color: red')
+        results.textContent = "You lose"
+        round.textContent = "Round: " + (rounds +=1)
+        points.textContent = "Computer points: " + (computerPoints += 1) + " Player points: " + (playerPoints)
     }
-    else console.log("You tied play again")
+    else if(result == "tie"){
+        results.setAttribute('style', 'color: black')
+        results.textContent = "You tied"
+        round.textContent = "Round: " + (rounds +=1) 
+        points.textContent = "Computer points: " + (computerPoints) + " Player points: " + (playerPoints)
     }
-    if(computerPoints < playerPoints){
-        return "You win! You got " + playerPoints + " points and the computer got " + computerPoints + " points"
+    if(playerPoints == 5){
+        results.setAttribute('style', 'color: green; font-size: 25px;')
+        results.textContent = "You win the game!";
+        rounds = 0;
+        playerPoints = 0;
+        computerPoints = 0;
     }
-    else if(computerPoints > playerPoints){
-        return "You lose! The computer got " + computerPoints + " points and you got " + playerPoints + " points"
-    }
-    else return "It's a tie you got " + playerPoints + " points and the computer got" + computerPoints + " points"
+    else if(computerPoints == 5){
+        results.setAttribute('style', 'color: red; font-size: 25px')
+        results.textContent = "You lose the game!";
+        rounds = 0;
+        playerPoints = 0;
+        computerPoints = 0;
+}
 }
